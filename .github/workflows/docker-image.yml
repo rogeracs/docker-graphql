@@ -32,7 +32,7 @@ jobs:
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        NEW_VERSION: ${{ steps.version.outputs.version }}
+       
         
       run: |
         echo "Iniciando login"
@@ -40,13 +40,15 @@ jobs:
         echo "New version: $NEW_VERSION !!!!!!!!!!"
         echo "Fin de login"
         
-    #- name: Build Docker Image
-    #  run: |
-    #    docker build -t rogeracs/docker-graphql:0.0.2 .  
+    - name: Build Docker Image
+      env:
+         NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker build -t rogeracs/docker-graphql:$NEW_VERSION .  
 
-   # - name: Push Docker Image
-   #   run: |
-    #    docker push rogeracs/docker-graphql:0.0.2   
+    - name: Push Docker Image
+      run: |
+        docker push rogeracs/docker-graphql:$NEW_VERSION   
        
     #   - name: Build the Docker image
     #  run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
